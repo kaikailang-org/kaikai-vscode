@@ -1,0 +1,84 @@
+{
+  "name": "kaikai",
+  "displayName": "kaikai",
+  "description": "Language support for kaikai — LSP, syntax highlighting, snippets.",
+  "version": "0.1.0",
+  "publisher": "kaikailang-org",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kaikailang-org/kaikai-vscode.git"
+  },
+  "homepage": "https://kaikai-lang.org",
+  "bugs": "https://github.com/kaikailang-org/kaikai-vscode/issues",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "keywords": [
+    "kaikai",
+    "functional",
+    "effects",
+    "lsp"
+  ],
+  "activationEvents": [
+    "onLanguage:kaikai"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "kaikai",
+        "aliases": ["kaikai", "kai"],
+        "extensions": [".kai"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "kaikai",
+        "scopeName": "source.kaikai",
+        "path": "./syntaxes/kaikai.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "kaikai",
+        "path": "./snippets/kaikai.json"
+      }
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "kaikai",
+      "properties": {
+        "kaikai.lspPath": {
+          "type": "string",
+          "default": "kai",
+          "description": "Path to the kai binary."
+        },
+        "kaikai.lspArgs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["lsp"],
+          "description": "Arguments passed to the kai binary."
+        },
+        "kaikai.trace.server": {
+          "type": "string",
+          "enum": ["off", "messages", "verbose"],
+          "default": "off",
+          "description": "Trace LSP traffic."
+        }
+      }
+    }
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1"
+  },
+  "scripts": {
+    "package": "vsce package",
+    "publish": "vsce publish"
+  }
+}
