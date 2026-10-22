@@ -2,7 +2,7 @@
   "name": "kaikai",
   "displayName": "kaikai",
   "description": "Language support for kaikai — LSP, syntax highlighting, snippets.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "publisher": "kaikailang-org",
   "license": "MIT",
   "repository": {
