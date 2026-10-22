@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 — 2026-10-22
 
 - Syntax highlighting tracks the kaikai 0.171 surface syntax.
 - `#[...]` attributes are highlighted as attributes, not comments. A
