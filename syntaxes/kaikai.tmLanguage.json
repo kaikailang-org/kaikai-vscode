@@ -2,30 +2,59 @@
   "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
   "name": "kaikai",
   "scopeName": "source.kaikai",
-  "fileTypes": ["kai"],
+  "fileTypes": [
+    "kai"
+  ],
   "patterns": [
-    { "include": "#comments" },
-    { "include": "#strings" },
-    { "include": "#chars" },
-    { "include": "#numbers" },
-    { "include": "#keywords" },
-    { "include": "#types" },
-    { "include": "#effects" },
-    { "include": "#holes" },
-    { "include": "#declarations" },
-    { "include": "#constructors" },
-    { "include": "#operators" }
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#attributes"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#regex"
+    },
+    {
+      "include": "#chars"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#declarations"
+    },
+    {
+      "include": "#visibility"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#types"
+    },
+    {
+      "include": "#effects"
+    },
+    {
+      "include": "#constructors"
+    },
+    {
+      "include": "#operators"
+    },
+    {
+      "include": "#holes"
+    }
   ],
   "repository": {
     "comments": {
       "patterns": [
         {
-          "name": "meta.preprocessor.derive.kaikai",
-          "match": "#derive\\b"
-        },
-        {
           "name": "comment.line.number-sign.kaikai",
-          "match": "#(?!derive\\b).*$",
+          "match": "#(?!\\[).*$",
           "captures": {
             "0": {
               "patterns": [
@@ -39,11 +68,77 @@
         }
       ]
     },
+    "attributes": {
+      "name": "meta.attribute.kaikai",
+      "begin": "(#\\[)\\s*([a-z_][A-Za-z0-9_]*)?",
+      "end": "\\]",
+      "beginCaptures": {
+        "1": {
+          "name": "punctuation.definition.attribute.begin.kaikai"
+        },
+        "2": {
+          "name": "entity.name.function.attribute.kaikai"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.definition.attribute.end.kaikai"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#attribute-brackets"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#chars"
+        },
+        {
+          "include": "#numbers"
+        },
+        {
+          "include": "#keywords"
+        },
+        {
+          "include": "#constructors"
+        },
+        {
+          "include": "#operators"
+        }
+      ]
+    },
+    "attribute-brackets": {
+      "begin": "\\[",
+      "end": "\\]",
+      "patterns": [
+        {
+          "include": "#attribute-brackets"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#numbers"
+        },
+        {
+          "include": "#constructors"
+        },
+        {
+          "include": "#operators"
+        }
+      ]
+    },
     "keywords": {
       "patterns": [
         {
           "name": "keyword.control.kaikai",
           "match": "\\b(if|else|match|case|when|for|with|handle|where|requires|ensures)\\b"
+        },
+        {
+          "name": "keyword.other.lazy.kaikai",
+          "match": "\\blazy\\b"
         },
         {
           "name": "storage.type.kaikai",
@@ -67,13 +162,30 @@
         }
       ]
     },
+    "visibility": {
+      "match": "\\b(pub)(\\()\\s*(pkg)\\s*(\\))",
+      "captures": {
+        "1": {
+          "name": "storage.modifier.kaikai"
+        },
+        "2": {
+          "name": "punctuation.section.parens.begin.kaikai"
+        },
+        "3": {
+          "name": "storage.modifier.kaikai"
+        },
+        "4": {
+          "name": "punctuation.section.parens.end.kaikai"
+        }
+      }
+    },
     "types": {
       "name": "support.type.builtin.kaikai",
-      "match": "\\b(Int|Real|Bool|String|Char|Unit|Nothing|Option|Result|List|Pair|Map|Set|Stack|Queue|Array|Decimal|Money|Fiber|Pid|Regex|Match|Capture|WallTime|Instant|Duration)\\b"
+      "match": "\\b(Int|Real|Bool|String|Char|Unit|Nothing|Option|Result|List|Pair|Map|Set|Seq|Stack|Queue|Array|Bytes|Decimal|BigInt|Complex|Int32|Int128|UInt32|UInt64|Money|Fiber|Pid|Regex|Match|Capture|WallTime|Instant|Duration)\\b"
     },
     "effects": {
       "name": "support.class.effect.kaikai",
-      "match": "\\b(Console|Stdin|Stdout|Stderr|File|Env|State|Reader|Writer|Actor|Spawn|Cancel|Mutable|Fail|Random|Time|Clock|Ffi)\\b"
+      "match": "\\b(Console|Stdin|Stdout|Stderr|File|Env|State|Reader|Writer|Actor|Spawn|Link|Monitor|Cancel|Mutable|Fail|Random|SecureRandom|Time|Clock|Ffi|Log|Trace|Process|Signal|Yield|NetTcp|NetUdp|NetUnix|NetDns)\\b"
     },
     "constructors": {
       "name": "entity.name.type.kaikai",
@@ -84,22 +196,30 @@
         {
           "match": "\\b(fn)\\s+([a-z_][A-Za-z0-9_]*)",
           "captures": {
-            "1": { "name": "storage.type.kaikai" },
-            "2": { "name": "entity.name.function.kaikai" }
+            "1": {
+              "name": "storage.type.kaikai"
+            },
+            "2": {
+              "name": "entity.name.function.kaikai"
+            }
           }
         },
         {
-          "match": "\\b(type|effect|protocol|impl)\\s+([A-Z][A-Za-z0-9_]*)",
+          "match": "\\b(type|effect|protocol|impl|kind|opaque)\\s+([A-Z][A-Za-z0-9_]*)",
           "captures": {
-            "1": { "name": "storage.type.kaikai" },
-            "2": { "name": "entity.name.type.kaikai" }
+            "1": {
+              "name": "storage.type.kaikai"
+            },
+            "2": {
+              "name": "entity.name.type.kaikai"
+            }
           }
         }
       ]
     },
     "numbers": {
       "name": "constant.numeric.kaikai",
-      "match": "\\b\\d[0-9_]*(\\.\\d[0-9_]*)?([eE][+-]?\\d+)?\\b"
+      "match": "\\b(0[xX][0-9a-fA-F]+|0[bB][01]+|\\d[0-9_]*(\\.\\d[0-9_]*)?([eE][+-]?\\d+)?)i?\\b"
     },
     "strings": {
       "patterns": [
@@ -108,8 +228,12 @@
           "begin": "\"\"\"",
           "end": "\"\"\"",
           "patterns": [
-            { "include": "#string-escapes" },
-            { "include": "#string-interp" }
+            {
+              "include": "#string-escapes"
+            },
+            {
+              "include": "#string-interp"
+            }
           ]
         },
         {
@@ -117,36 +241,138 @@
           "begin": "\"",
           "end": "\"",
           "patterns": [
-            { "include": "#string-escapes" },
-            { "include": "#string-interp" }
+            {
+              "include": "#string-escapes"
+            },
+            {
+              "include": "#string-interp"
+            }
           ]
         }
       ]
     },
     "string-escapes": {
-      "name": "constant.character.escape.kaikai",
-      "match": "\\\\([\\\\\"'nrt0]|u\\{[0-9a-fA-F]+\\})"
+      "patterns": [
+        {
+          "name": "constant.character.escape.kaikai",
+          "match": "\\\\([\\\\\"'nrt0]|x[0-9a-fA-F]{2}|u\\{[0-9a-fA-F]+\\})"
+        },
+        {
+          "name": "invalid.illegal.escape.kaikai",
+          "match": "\\\\."
+        }
+      ]
     },
     "string-interp": {
       "name": "meta.embedded.expression.kaikai",
       "begin": "#\\{",
       "end": "\\}",
-      "beginCaptures": { "0": { "name": "punctuation.section.embedded.begin.kaikai" } },
-      "endCaptures":   { "0": { "name": "punctuation.section.embedded.end.kaikai" } },
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.begin.kaikai"
+        }
+      },
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.embedded.end.kaikai"
+        }
+      },
       "patterns": [
-        { "include": "#numbers" },
-        { "include": "#keywords" },
-        { "include": "#types" },
-        { "include": "#effects" },
-        { "include": "#strings" },
-        { "include": "#chars" },
-        { "include": "#operators" },
-        { "include": "#constructors" }
+        {
+          "include": "#interp-format"
+        },
+        {
+          "include": "#interp-braces"
+        },
+        {
+          "include": "#numbers"
+        },
+        {
+          "include": "#visibility"
+        },
+        {
+          "include": "#keywords"
+        },
+        {
+          "include": "#types"
+        },
+        {
+          "include": "#effects"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#chars"
+        },
+        {
+          "include": "#operators"
+        },
+        {
+          "include": "#constructors"
+        },
+        {
+          "include": "#holes"
+        }
+      ]
+    },
+    "interp-format": {
+      "match": "(:)([<>^]?[0-9]*(?:\\.[0-9]+)?)(?=\\})",
+      "captures": {
+        "1": {
+          "name": "punctuation.separator.format.kaikai"
+        },
+        "2": {
+          "name": "constant.other.format-spec.kaikai"
+        }
+      }
+    },
+    "interp-braces": {
+      "begin": "\\{",
+      "end": "\\}",
+      "patterns": [
+        {
+          "include": "#interp-braces"
+        },
+        {
+          "include": "#numbers"
+        },
+        {
+          "include": "#visibility"
+        },
+        {
+          "include": "#keywords"
+        },
+        {
+          "include": "#types"
+        },
+        {
+          "include": "#effects"
+        },
+        {
+          "include": "#strings"
+        },
+        {
+          "include": "#chars"
+        },
+        {
+          "include": "#operators"
+        },
+        {
+          "include": "#constructors"
+        },
+        {
+          "include": "#holes"
+        }
       ]
     },
     "chars": {
       "name": "string.quoted.single.kaikai",
       "match": "'(\\\\(u\\{[0-9a-fA-F]+\\}|.)|[^\\\\'])'"
+    },
+    "regex": {
+      "name": "string.regexp.kaikai",
+      "match": "~r/(?:\\\\.|[^/\\\\])*/[a-z]*"
     },
     "holes": {
       "name": "variable.language.hole.kaikai",
@@ -156,7 +382,11 @@
       "patterns": [
         {
           "name": "keyword.operator.pipe.kaikai",
-          "match": "\\|>|\\|"
+          "match": "\\|>|\\|\\||\\|\\?|\\|!|\\|"
+        },
+        {
+          "name": "keyword.operator.coalesce.kaikai",
+          "match": "\\?\\?"
         },
         {
           "name": "keyword.operator.arrow.kaikai",
@@ -184,7 +414,7 @@
         },
         {
           "name": "keyword.operator.other.kaikai",
-          "match": "[!@:]|::"
+          "match": "[!@:&$]"
         }
       ]
     }

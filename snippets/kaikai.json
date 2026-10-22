@@ -9,7 +9,7 @@
   "fn (block body)": {
     "prefix": "fnblock",
     "body": [
-      "fn ${1:name}(${2:args}) : ${3:Unit} = {",
+      "fn ${1:name}(${2:args}) : ${3:Unit} {",
       "  $0",
       "}"
     ],
@@ -18,7 +18,7 @@
   "pub fn": {
     "prefix": "pubfn",
     "body": [
-      "pub fn ${1:name}(${2:args}) : ${3:Unit} = {",
+      "pub fn ${1:name}(${2:args}) : ${3:Unit} {",
       "  $0",
       "}"
     ],
@@ -37,8 +37,8 @@
   "sum type": {
     "prefix": "type_sum",
     "body": [
-      "type ${1:Name} =",
-      "  | ${2:Variant1}",
+      "type ${1:Name}",
+      "  = ${2:Variant1}",
       "  | ${3:Variant2}$0"
     ],
     "description": "Sum type with variants."
@@ -72,7 +72,7 @@
     "prefix": "impl",
     "body": [
       "impl ${1:Protocol} for ${2:Type} {",
-      "  $0",
+      "  fn ${3:method}(self: ${2:Type}) : ${4:ReturnType} = $0",
       "}"
     ],
     "description": "Protocol implementation."
@@ -107,7 +107,7 @@
   "lambda": {
     "prefix": "lambda",
     "body": [
-      "fn(${1:x}) -> $0"
+      "(${1:x}) => $0"
     ],
     "description": "Anonymous function."
   }
