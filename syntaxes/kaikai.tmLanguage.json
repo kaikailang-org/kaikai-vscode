@@ -142,7 +142,7 @@
         },
         {
           "name": "storage.type.kaikai",
-          "match": "\\b(fn|let|var|const|type|effect|protocol|impl|import|use|test|bench|check|extern|axiom|theory|unit)\\b"
+          "match": "\\b(fn|let|var|const|type|effect|protocol|impl|import|use|test|bench|check|extern|axiom|theory)\\b"
         },
         {
           "name": "storage.modifier.kaikai",
@@ -211,6 +211,20 @@
               "name": "storage.type.kaikai"
             },
             "2": {
+              "name": "entity.name.type.kaikai"
+            }
+          }
+        },
+        {
+          "match": "^\\s*(?:(pub(?:\\(pkg\\))?)\\s+)?(unit|currency|perm|layout|region)\\s+([A-Za-z_][A-Za-z0-9_]*)",
+          "captures": {
+            "1": {
+              "name": "storage.modifier.kaikai"
+            },
+            "2": {
+              "name": "storage.type.kaikai"
+            },
+            "3": {
               "name": "entity.name.type.kaikai"
             }
           }

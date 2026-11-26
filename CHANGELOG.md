@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- `unit`, `currency`, `perm`, `layout` and `region` are highlighted only
+  as declaration heads (`unit Meter`). A variable named `unit` is no
+  longer coloured as a keyword.
+
 ## 0.2.0 — 2026-10-22
 
 - Syntax highlighting tracks the kaikai 0.171 surface syntax.
